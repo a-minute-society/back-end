@@ -1,6 +1,6 @@
-package com.project.aminutesociety.example.entity;
+package com.project.aminutesociety.user.entity;
 
-import com.project.aminutesociety.example.dto.UserSignUpDto;
+import com.project.aminutesociety.user.dto.UserSignUpDto;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

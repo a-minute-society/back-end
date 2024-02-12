@@ -1,8 +1,8 @@
-package com.project.aminutesociety.example.controller;
+package com.project.aminutesociety.user.controller;
 
-import com.project.aminutesociety.example.dto.UserLoginRequestDto;
-import com.project.aminutesociety.example.dto.UserSignUpDto;
-import com.project.aminutesociety.example.service.UserService;
+import com.project.aminutesociety.user.dto.UserLoginRequestDto;
+import com.project.aminutesociety.user.dto.UserSignUpDto;
+import com.project.aminutesociety.user.service.UserService;
 import com.project.aminutesociety.util.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
