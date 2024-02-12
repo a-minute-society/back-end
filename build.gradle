@@ -31,6 +31,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	// 추후에 cors, https 설정을 위해 security 의존성 추가 필요
+	implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+
 }
 
 tasks.named('test') {

@@ -1,22 +1,24 @@
 package com.project.aminutesociety.example.dto;
 
-import com.project.aminutesociety.example.entity.Member;
+import com.project.aminutesociety.example.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class CreateMemberDto {
+public class UserSignUpDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Req {
         private String userId;
+        private String userName;
         private String userPw;
 
-        public Member toEntity() {
-            return Member.builder()
+        public User toEntity() {
+            return User.builder()
                     .userId(this.userId)
+                    .userName(this.userName)
                     .userPw(this.userPw)
                     .build();
         }
@@ -26,11 +28,13 @@ public class CreateMemberDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Res {
         private Long id;
+        private String userName;
         private String userId;
 
         @Builder
-        public Res(Long id, String userId) {
+        public Res(Long id, String userName, String userId) {
             this.id = id;
+            this.userName = userName;
             this.userId = userId;
         }
     }
