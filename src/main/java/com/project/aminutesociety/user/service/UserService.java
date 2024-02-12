@@ -1,7 +1,7 @@
-package com.project.aminutesociety.example.service;
+package com.project.aminutesociety.user.service;
 
-import com.project.aminutesociety.example.dto.UserLoginRequestDto;
-import com.project.aminutesociety.example.dto.UserSignUpDto;
+import com.project.aminutesociety.user.dto.UserLoginRequestDto;
+import com.project.aminutesociety.user.dto.UserSignUpDto;
 import com.project.aminutesociety.util.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 

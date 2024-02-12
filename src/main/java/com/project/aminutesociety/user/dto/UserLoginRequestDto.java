@@ -1,4 +1,4 @@
-package com.project.aminutesociety.example.dto;
+package com.project.aminutesociety.user.dto;
 
 
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.project.aminutesociety.example.repository;
+package com.project.aminutesociety.user.repository;
 
-import com.project.aminutesociety.example.entity.User;
+import com.project.aminutesociety.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

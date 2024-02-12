@@ -1,10 +1,10 @@
-package com.project.aminutesociety.example.service;
+package com.project.aminutesociety.user.service;
 
-import com.project.aminutesociety.example.dto.UserLoginRequestDto;
-import com.project.aminutesociety.example.dto.UserLoginResponseDto;
-import com.project.aminutesociety.example.dto.UserSignUpDto;
-import com.project.aminutesociety.example.entity.User;
-import com.project.aminutesociety.example.repository.userRepository;
+import com.project.aminutesociety.user.dto.UserLoginRequestDto;
+import com.project.aminutesociety.user.dto.UserLoginResponseDto;
+import com.project.aminutesociety.user.dto.UserSignUpDto;
+import com.project.aminutesociety.user.entity.User;
+import com.project.aminutesociety.user.repository.userRepository;
 import com.project.aminutesociety.util.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

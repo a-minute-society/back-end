@@ -1,6 +1,6 @@
-package com.project.aminutesociety.example.dto;
+package com.project.aminutesociety.user.dto;
 
-import com.project.aminutesociety.example.entity.User;
+import com.project.aminutesociety.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
