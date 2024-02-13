@@ -9,4 +9,6 @@ public interface CategoryService {
     ResponseEntity<ApiResponse<?>> readCategories();
 
     ResponseEntity<ApiResponse<?>> setCateogires(String userId, CategorySetDto categorySetDto);
+
+    ResponseEntity<ApiResponse<?>> changeCategories(String userId, CategorySetDto categorySetDto);
 }
