@@ -1,5 +1,6 @@
 package com.project.aminutesociety.video.entity;
 
+import com.project.aminutesociety.category.Category;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,7 +27,8 @@ public class Video extends BaseEntity {
     @Column(columnDefinition = "TEXT", name = "url")
     private String url; // 영상이 실제로 존재하는 S3 경로
 
-    // TODO : 카테고리 (FK) 추가
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category; // 카테고리 FK
 
 }
