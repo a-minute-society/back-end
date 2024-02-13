@@ -1,5 +1,6 @@
 package com.project.aminutesociety.util.response;
 
+import com.project.aminutesociety.usercategory.entity.UserCategory;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> createSuccessWithData(T data, String message) {
         return new ApiResponse<>(OK, data, message);
     }
+
     public static <T> ApiResponse<T> createSuccessWithoutData(int status, String message) {
         return new ApiResponse<>(status, null, message);
     }
@@ -46,6 +48,14 @@ public class ApiResponse<T> {
 
     public static<T> ApiResponse<T> checkUserIdSuccessWithData(T data, String message) {
         return new ApiResponse<>(OK, data, message);
+    }
+
+    public static<T> ApiResponse<T> readCategoriesSuccessWithData(T data, String message) {
+        return new ApiResponse<>(OK, data, message);
+    }
+
+    public static<T> ApiResponse<T> readCategoriesFailWithoutData(int status, String message) {
+        return new ApiResponse<>(status, null, message);
     }
 
     public static <T> ApiResponse<T> createFailWithData(int status, BindingResult bindingResult) {

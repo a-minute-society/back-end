@@ -1,5 +1,6 @@
-package com.project.aminutesociety.category;
+package com.project.aminutesociety.category.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.aminutesociety.usercategory.entity.UserCategory;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -16,7 +17,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     private Long id; // 자동 생성 PK
 
