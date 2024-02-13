@@ -6,6 +6,7 @@ import com.project.aminutesociety.usercategory.entity.UserCategory;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,4 +37,5 @@ public class User extends BaseEntity {
     private List<Scrap> scraps = new ArrayList<>();
 
     public static User signUp(UserSignUpDto.Req req) { return req.toEntity(); }
+
 }

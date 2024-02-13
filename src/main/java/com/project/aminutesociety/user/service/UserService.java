@@ -10,4 +10,6 @@ public interface UserService {
     ResponseEntity<ApiResponse<?>> login(UserLoginRequestDto userLoginDto);
 
     ResponseEntity<ApiResponse<?>> checkUserId(String userId);
+
+    ResponseEntity<ApiResponse<?>> userInfo(String userId);
 }

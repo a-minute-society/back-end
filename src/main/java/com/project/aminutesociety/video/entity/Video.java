@@ -1,6 +1,6 @@
 package com.project.aminutesociety.video.entity;
 
-import com.project.aminutesociety.category.Category;
+import com.project.aminutesociety.category.entity.Category;
 import com.project.aminutesociety.scrap.entity.Scrap;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;

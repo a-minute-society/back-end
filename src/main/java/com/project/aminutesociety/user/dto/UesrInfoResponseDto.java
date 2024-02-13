@@ -7,11 +7,12 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Setter
+
 @Getter
 @Builder
-public class UserLoginResponseDto {
+public class UesrInfoResponseDto {
     private Long id;
     private String userId;
     private String userName;
+    private List<CategoryResponseDto> userCategories;
 }
