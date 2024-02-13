@@ -1,9 +1,13 @@
 package com.project.aminutesociety.video.entity;
 
 import com.project.aminutesociety.category.Category;
+import com.project.aminutesociety.scrap.entity.Scrap;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -31,4 +35,6 @@ public class Video extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category; // 카테고리 FK
 
+    @OneToMany(mappedBy = "video", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Scrap> scraps = new ArrayList<>();
 }
