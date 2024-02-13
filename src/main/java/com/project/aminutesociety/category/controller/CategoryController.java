@@ -21,9 +21,15 @@ public class CategoryController {
         return categorySeviceImpl.readCategories();
     }
 
-    // 유저 관심분야 설정
+    // 유저 관심분야(카테고리) 설정
     @PostMapping("/{userId}/set-categories")
     public ResponseEntity<ApiResponse<?>> setCategories(@PathVariable String userId, @RequestBody CategorySetDto categorySetDto) {
         return categorySeviceImpl.setCateogires(userId, categorySetDto);
+    }
+
+    // 유저 관심분야(카테고리) 변경
+    @PutMapping("/{userId}/change-categories")
+    public ResponseEntity<ApiResponse<?>> changeCategories(@PathVariable String userId, @RequestBody CategorySetDto categorySetDto) {
+        return categorySeviceImpl.changeCategories(userId, categorySetDto);
     }
 }
