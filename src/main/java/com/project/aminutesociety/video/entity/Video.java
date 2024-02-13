@@ -23,8 +23,8 @@ public class Video extends BaseEntity {
     @Column(name = "run_time")
     private Integer runTime; // 영상 길이 (초 단위)
 
-    @Column(columnDefinition = "TEXT", name = "url")
-    private String url; // 영상이 실제로 존재하는 S3 경로
+    @Column(columnDefinition = "TEXT", name = "file_path")
+    private String filePath; // 영상이 실제로 존재하는 S3 경로
 
     // TODO : 카테고리 (FK) 추가
 
