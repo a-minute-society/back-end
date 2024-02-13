@@ -1,5 +1,6 @@
 package com.project.aminutesociety.user.entity;
 
+import com.project.aminutesociety.scrap.entity.Scrap;
 import com.project.aminutesociety.user.dto.UserSignUpDto;
 import com.project.aminutesociety.usercategory.entity.UserCategory;
 import com.project.aminutesociety.util.entity.BaseEntity;
@@ -30,6 +31,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<UserCategory> userCategories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Scrap> scraps = new ArrayList<>();
 
     public static User signUp(UserSignUpDto.Req req) { return req.toEntity(); }
 }
