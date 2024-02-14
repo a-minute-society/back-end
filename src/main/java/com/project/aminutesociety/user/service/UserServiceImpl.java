@@ -1,10 +1,7 @@
 package com.project.aminutesociety.user.service;
 
 import com.project.aminutesociety.category.dto.CategoryResponseDto;
-import com.project.aminutesociety.user.dto.UesrInfoResponseDto;
-import com.project.aminutesociety.user.dto.UserLoginRequestDto;
-import com.project.aminutesociety.user.dto.UserLoginResponseDto;
-import com.project.aminutesociety.user.dto.UserSignUpDto;
+import com.project.aminutesociety.user.dto.*;
 import com.project.aminutesociety.domain.User;
 import com.project.aminutesociety.user.repository.UserRepository;
 import com.project.aminutesociety.domain.UserCategory;
@@ -134,9 +131,32 @@ public class UserServiceImpl implements UserService {
                 .userId(savedUser.getUserId())
                 .userName(savedUser.getUserName())
                 .userCategories(categoryResponseDtos)
+                .time(savedUser.getTime())
                 .build();
 
         ApiResponse<UesrInfoResponseDto> response = ApiResponse.checkUserIdSuccessWithData(userInfoResponseDto, "사용자 정보 조회가 완료되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<?>> changeTime(String userId, ChangeTimeDto changeTimeDto) {
+        Optional<User> optionalUser = userRepository.findUserByUserId(userId);
+
+        // 존재하는 회원인지 확인
+        if(!optionalUser.isPresent()) {
+            ApiResponse<UserSignUpDto.Res> res = ApiResponse.checkUserIdFailWithoutData(400, "회원을 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        }
+
+        User savedUser = optionalUser.get();
+        Integer time = changeTimeDto.getTime();
+
+        // 시간 변경
+        savedUser.changeTime(time);
+        userRepository.save(savedUser);
+
+        ApiResponse<UesrInfoResponseDto> response = ApiResponse.createFailWithoutData(200, "시간 설정이 완료되었습니다.");
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }

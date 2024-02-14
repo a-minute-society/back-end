@@ -42,4 +42,8 @@ public class User extends BaseEntity {
 
     public static User signUp(UserSignUpDto.Req req) { return req.toEntity(); }
 
+    public void changeTime(Integer time) {
+        this.time = time;
+    }
+
 }
