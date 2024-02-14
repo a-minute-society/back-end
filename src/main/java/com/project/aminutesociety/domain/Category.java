@@ -1,7 +1,5 @@
-package com.project.aminutesociety.category.entity;
+package com.project.aminutesociety.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.aminutesociety.usercategory.entity.UserCategory;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

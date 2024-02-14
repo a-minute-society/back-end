@@ -2,12 +2,12 @@ package com.project.aminutesociety.category.service;
 
 import com.project.aminutesociety.category.dto.CategoryResponseDto;
 import com.project.aminutesociety.category.dto.CategorySetDto;
-import com.project.aminutesociety.category.entity.Category;
+import com.project.aminutesociety.domain.Category;
 import com.project.aminutesociety.category.repository.CategoryRepository;
 import com.project.aminutesociety.user.dto.UserSignUpDto;
-import com.project.aminutesociety.user.entity.User;
+import com.project.aminutesociety.domain.User;
 import com.project.aminutesociety.user.repository.UserRepository;
-import com.project.aminutesociety.usercategory.entity.UserCategory;
+import com.project.aminutesociety.domain.UserCategory;
 import com.project.aminutesociety.util.response.ApiResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

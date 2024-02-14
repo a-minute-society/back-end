@@ -1,6 +1,5 @@
 package com.project.aminutesociety.util.response;
 
-import com.project.aminutesociety.usercategory.entity.UserCategory;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

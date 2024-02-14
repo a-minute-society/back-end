@@ -1,7 +1,7 @@
-package com.project.aminutesociety.video.entity;
+package com.project.aminutesociety.domain;
 
-import com.project.aminutesociety.category.entity.Category;
-import com.project.aminutesociety.scrap.entity.Scrap;
+import com.project.aminutesociety.domain.Category;
+import com.project.aminutesociety.domain.Scrap;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

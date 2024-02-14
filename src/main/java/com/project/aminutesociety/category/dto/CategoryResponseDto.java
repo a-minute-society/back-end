@@ -1,6 +1,6 @@
 package com.project.aminutesociety.category.dto;
 
-import com.project.aminutesociety.usercategory.entity.UserCategory;
+import com.project.aminutesociety.domain.UserCategory;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
