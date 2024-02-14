@@ -37,4 +37,12 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.createFailWithoutData(HttpStatus.BAD_REQUEST.value(), errorMessage));
     }
 
+    // Custom Exception
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleEntityNotFoundException(EntityNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.createFailWithoutData(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+    }
+
 }

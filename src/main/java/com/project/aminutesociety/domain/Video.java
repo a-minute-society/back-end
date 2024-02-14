@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Video extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "video_id")
     private Long id; // 자동 생성 PK
 
@@ -30,6 +30,9 @@ public class Video extends BaseEntity {
 
     @Column(columnDefinition = "TEXT", name = "url")
     private String url; // 영상이 실제로 존재하는 S3 경로
+
+    @Column(name = "video_title")
+    private String title; // 영상 제목
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
