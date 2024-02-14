@@ -1,6 +1,5 @@
-package com.project.aminutesociety.attendance.entity;
+package com.project.aminutesociety.domain;
 
-import com.project.aminutesociety.user.entity.User;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

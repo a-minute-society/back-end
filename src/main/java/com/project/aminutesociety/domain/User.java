@@ -1,9 +1,6 @@
-package com.project.aminutesociety.user.entity;
+package com.project.aminutesociety.domain;
 
-import com.project.aminutesociety.attendance.entity.Attendance;
-import com.project.aminutesociety.scrap.entity.Scrap;
 import com.project.aminutesociety.user.dto.UserSignUpDto;
-import com.project.aminutesociety.usercategory.entity.UserCategory;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
