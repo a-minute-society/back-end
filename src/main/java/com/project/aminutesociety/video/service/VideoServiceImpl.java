@@ -7,7 +7,8 @@ import com.project.aminutesociety.domain.Video;
 import com.project.aminutesociety.user.repository.UserRepository;
 import com.project.aminutesociety.util.exception.EntityNotFoundException;
 import com.project.aminutesociety.util.response.ApiResponse;
-import com.project.aminutesociety.video.dto.RecommendVideoRes;
+import com.project.aminutesociety.video.dto.EditRecommendVideo;
+import com.project.aminutesociety.video.dto.RecommendVideo;
 import com.project.aminutesociety.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +58,8 @@ public class VideoServiceImpl implements VideoService{
         }
 
         // DTO로 변환
-        List<RecommendVideoRes.Res.RecommendVideoDto> recommendVideoDtos = recommendVideoList.stream()
-                .map(video -> RecommendVideoRes.Res.RecommendVideoDto.builder()
+        List<RecommendVideo.Res.RecommendVideoDto> recommendVideoDtos = recommendVideoList.stream()
+                .map(video -> RecommendVideo.Res.RecommendVideoDto.builder()
                         .videoId(video.getId())
                         .categoryId(video.getCategory().getId())
                         .runTime(formatRunTime(video.getRunTime()))
@@ -68,11 +69,67 @@ public class VideoServiceImpl implements VideoService{
                 .collect(Collectors.toList());
 
         // 응답 객체 생성 및 반환
-        RecommendVideoRes.Res responseDto = new RecommendVideoRes.Res();
+        RecommendVideo.Res responseDto = new RecommendVideo.Res();
         responseDto.setVideos(recommendVideoDtos);
 
-        ApiResponse<RecommendVideoRes.Res> response = ApiResponse.createSuccessWithData(responseDto, "영상 추천에 성공하였습니다.");
+        ApiResponse<RecommendVideo.Res> response = ApiResponse.createSuccessWithData(responseDto, "영상 추천에 성공하였습니다.");
         return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<?>> editRecommendVideo(String userId, Integer time, EditRecommendVideo.Req req) {
+
+        // 유저가 존재하는지 확인하고 유저 가져오기
+        User user = userRepository.findUserByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId + "인 사용자는 존재하지 않습니다."));
+
+        // 유저의 관심 카테고리 가져오기
+        List<UserCategory> userCategories = user.getUserCategories();
+        List<Video> categoryVideos = new ArrayList<>();
+
+        // 해당 카테고리의 영상들 가져오기
+        for (UserCategory userCategory : userCategories) {
+            Category category = userCategory.getCategory();
+            List<Video> videos = videoRepository.findByCategory(category);
+            categoryVideos.addAll(videos);
+        }
+
+        // includeVideoIds에 포함되지 않고, excludeVideoId에 해당하지 않는 영상 필터링
+        List<Video> filteredVideos = categoryVideos.stream()
+                .filter(video -> !req.getIncludeVideoIds().contains(video.getId().intValue()) && !video.getId().equals(req.getExcludeVideoId().longValue()))
+                .collect(Collectors.toList());
+
+        // excludeVideoId의 영상 시간을 제외한 남은 시간 계산
+        Video excludeVideo = videoRepository.findById(req.getExcludeVideoId().longValue())
+                .orElse(null);
+        int excludeTime = excludeVideo != null ? excludeVideo.getRunTime() : 0;
+        int remainTime = time - excludeTime;
+
+        // 남은 시간에 맞는 영상 하나 선택
+        Video selectedVideo = filteredVideos.stream()
+                .filter(video -> video.getRunTime() <= remainTime)
+                .findFirst()
+                .orElse(null);
+
+        // dto로 변환 사용 Builder 패턴
+        EditRecommendVideo.Res response = null;
+        if (selectedVideo != null) {
+            EditRecommendVideo.Res.EditedVideo editedVideo = EditRecommendVideo.Res.EditedVideo.builder()
+                    .categoryId(selectedVideo.getCategory().getId())
+                    .videoId(selectedVideo.getId())
+                    .runTime(formatRunTime(selectedVideo.getRunTime()))
+                    .url(selectedVideo.getUrl())
+                    .videoTitle(selectedVideo.getTitle())
+                    .build();
+
+            response = EditRecommendVideo.Res.builder()
+                    .editedVideo(editedVideo)
+                    .build();
+        }
+
+        // 응답 반환
+        ApiResponse<EditRecommendVideo.Res> apiResponse = ApiResponse.createSuccessWithData(response, "영상 추천에 성공하였습니다.");
+        return ResponseEntity.ok(apiResponse);
     }
 
     // 재생 시간 응답을 위해 포맷 작성
