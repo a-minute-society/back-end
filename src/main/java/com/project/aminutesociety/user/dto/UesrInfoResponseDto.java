@@ -14,5 +14,6 @@ public class UesrInfoResponseDto {
     private Long id;
     private String userId;
     private String userName;
+    private Integer time;
     private List<CategoryResponseDto> userCategories;
 }

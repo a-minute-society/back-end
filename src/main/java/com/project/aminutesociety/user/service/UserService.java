@@ -1,5 +1,6 @@
 package com.project.aminutesociety.user.service;
 
+import com.project.aminutesociety.user.dto.ChangeTimeDto;
 import com.project.aminutesociety.user.dto.UserLoginRequestDto;
 import com.project.aminutesociety.user.dto.UserSignUpDto;
 import com.project.aminutesociety.util.response.ApiResponse;
@@ -12,4 +13,6 @@ public interface UserService {
     ResponseEntity<ApiResponse<?>> checkUserId(String userId);
 
     ResponseEntity<ApiResponse<?>> userInfo(String userId);
+
+    ResponseEntity<ApiResponse<?>> changeTime(String userId, ChangeTimeDto changeTimeDto);
 }

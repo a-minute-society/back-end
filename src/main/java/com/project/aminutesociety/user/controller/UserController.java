@@ -1,5 +1,6 @@
 package com.project.aminutesociety.user.controller;
 
+import com.project.aminutesociety.user.dto.ChangeTimeDto;
 import com.project.aminutesociety.user.dto.UserLoginRequestDto;
 import com.project.aminutesociety.user.dto.UserSignUpDto;
 import com.project.aminutesociety.user.service.UserService;
@@ -44,6 +45,13 @@ public class UserController {
     @GetMapping("/{userId}/user-info")
     public ResponseEntity<ApiResponse<?>> userInfo(@PathVariable String userId) {
         ResponseEntity<ApiResponse<?>> result = userService.userInfo(userId);
+        return result;
+    }
+
+    // 소요시간 변경
+    @PutMapping("/{userId}/change-time")
+    public ResponseEntity<ApiResponse<?>> changeTime(@PathVariable String userId, @RequestBody ChangeTimeDto changeTimeDto) {
+        ResponseEntity<ApiResponse<?>> result = userService.changeTime(userId, changeTimeDto);
         return result;
     }
 
