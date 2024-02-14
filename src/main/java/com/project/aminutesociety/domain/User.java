@@ -23,9 +23,13 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId;
-    private String userName;
-    private String userPw;
+    private String userId; // 아이디
+    private String userName; // 유저 이름
+    private String userPw; // 비밀번호
+
+    private Integer time; // 소요시간
+    private String depart; // 출발지
+    private String arrive; // 도착지
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<UserCategory> userCategories = new ArrayList<>();
