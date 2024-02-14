@@ -1,4 +1,4 @@
-package com.project.aminutesociety.security;
+package com.project.aminutesociety.util.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
