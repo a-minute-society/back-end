@@ -21,3 +21,5 @@ INSERT INTO videos (category_id, run_time) VALUES (3, 420)
 INSERT INTO videos (category_id, run_time) VALUES (3, 600)
 INSERT INTO videos (category_id, run_time) VALUES (3, 480)
 INSERT INTO videos (category_id, run_time) VALUES (3, 840)
+
+INSERT INTO users (user_id, user_name, user_pw) VALUES ('hello', 'a', '1234')
