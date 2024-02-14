@@ -1,12 +1,12 @@
 package com.project.aminutesociety.user.entity;
 
+import com.project.aminutesociety.attendance.entity.Attendance;
 import com.project.aminutesociety.scrap.entity.Scrap;
 import com.project.aminutesociety.user.dto.UserSignUpDto;
 import com.project.aminutesociety.usercategory.entity.UserCategory;
 import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Scrap> scraps = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Attendance> attendances = new ArrayList<>();
 
     public static User signUp(UserSignUpDto.Req req) { return req.toEntity(); }
 
