@@ -1,6 +1,5 @@
 package com.project.aminutesociety.attendance.dto;
 
-import com.project.aminutesociety.video.dto.RecommendVideo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +11,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor()
 @AllArgsConstructor()
-public class AttendanceResDto {
-    private Long attendanceId;
-    private String date;
-    private String accumulatedTime;
+public class MyPageDetailResDto {
+    private Long videoId;
+    private Long categoryId;
+    private String url;
+    private String title;
+    private boolean isScrap;
 }

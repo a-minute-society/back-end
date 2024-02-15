@@ -20,8 +20,15 @@ public class AttendanceController {
         return attendanceService.setSaveTime(userId, setAttendanceDto);
     }
 
+    // 마이페이지 접속
     @GetMapping("/{userId}")
     public ResponseEntity<ApiResponse<?>> readAttendanceAll(@PathVariable("userId") String userId) {
         return attendanceService.readAttendanceAll(userId);
+    }
+
+    // 마이페이지 캘린더에서 특정 날짜를 클릭
+    @GetMapping("/{userId}/get")
+    public ResponseEntity<ApiResponse<?>> readAttendance(@PathVariable("userId") String userId, @RequestParam("date") String date) {
+        return attendanceService.readAttendance(userId, date);
     }
 }

@@ -10,4 +10,6 @@ public interface AttendanceService {
     ResponseEntity<ApiResponse<?>> setSaveTime(String userId, SetAttendanceDto setAttendanceDto);
 
     ResponseEntity<ApiResponse<?>> readAttendanceAll(String userId);
+
+    ResponseEntity<ApiResponse<?>> readAttendance(String userId, String date);
 }
