@@ -11,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface ScrapRepository extends JpaRepository<Scrap, Long> {
     Optional<Scrap> findByUserAndVideo(User user, Video video);
+    void deleteByUserAndVideo(User user, Video video);
 }

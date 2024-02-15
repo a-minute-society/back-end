@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service;
 public interface ScrapService {
 
     ResponseEntity<ApiResponse<?>> createScrap(String userId, Long videoId);
+    ResponseEntity<ApiResponse<?>> deleteScrap(String userId, Long videoId);
 }

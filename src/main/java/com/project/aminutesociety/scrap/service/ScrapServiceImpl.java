@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +45,31 @@ public class ScrapServiceImpl implements ScrapService{
         // 응답 반환
         ApiResponse<String> data = ApiResponse.createSuccessWithoutData(HttpStatus.CREATED.value(), "스크랩이 완료되었습니다.");
         return ResponseEntity.status(HttpStatus.CREATED).body(data);
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<ApiResponse<?>> deleteScrap(String userId, Long videoId) {
+
+        // 유저가 존재하는지 확인하고 유저 가져오기
+        User user = userRepository.findUserByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId + "인 사용자는 존재하지 않습니다."));
+
+        // 비디오가 존재하는지 확인하고 비디오 가져오기
+        Video video = videoRepository.findById(videoId)
+                .orElseThrow(() -> new EntityNotFoundException("비디오 아이디가 " + videoId + "인 비디오는 존재하지 않습니다."));
+
+        // 스크랩되지 않은 영상이면 오류 발생
+        if(scrapRepository.findByUserAndVideo(user, video).isEmpty()) {
+            ApiResponse<String> data = ApiResponse.createFailWithoutData(HttpStatus.BAD_REQUEST.value(), "스크랩하지 않은 영상입니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(data);
+        }
+
+        // 스크랩 취소
+        scrapRepository.deleteByUserAndVideo(user, video);
+
+        // 응답 반환
+        ApiResponse<String> data = ApiResponse.createSuccessWithoutData(HttpStatus.ACCEPTED.value(), "스크랩이 취소되었습니다.");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(data);
     }
 }
