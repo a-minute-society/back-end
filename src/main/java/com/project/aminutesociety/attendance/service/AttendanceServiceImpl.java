@@ -63,19 +63,29 @@ public class AttendanceServiceImpl implements AttendanceService{
 
 
         List<Integer> videoIdList = setAttendanceDto.getVideoId();
+        List<AttendanceVideo> newAttendanceVideos = new ArrayList<>();
 
         for (Integer videoId : videoIdList) {
             // 영상이 존재하는지 확인
             Video video = videoRepository.findById(valueOf(videoId))
                     .orElseThrow(() -> new EntityNotFoundException("id가 " + videoId + "인 영상은 존재하지 않습니다."));
 
-            // attendanceVideo 생성
-            AttendanceVideo attendanceVideo = AttendanceVideo.builder()
-                    .attendance(attendance)
-                    .video(video)
-                    .build();
-            attendance.getAttendanceVideos().add(attendanceVideo);
+            // 이미 해당 영상이 있는지 확인
+            boolean isDuplicate = attendance.getAttendanceVideos().stream()
+                    .anyMatch(attendanceVideo -> attendanceVideo.getVideo().equals(video));
+
+            // 중복되지 않은 경우에만 추가
+            if (!isDuplicate) {
+                // attendanceVideo 생성
+                AttendanceVideo attendanceVideo = AttendanceVideo.builder()
+                        .attendance(attendance)
+                        .video(video)
+                        .build();
+                newAttendanceVideos.add(attendanceVideo);
+            }
         }
+        // 새로운 영상만 추가
+        attendance.getAttendanceVideos().addAll(newAttendanceVideos);
 
         user.getAttendances().add(attendance);
         userRepository.save(user);
