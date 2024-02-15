@@ -31,4 +31,8 @@ public class Attendance extends BaseEntity {
 
     @OneToMany(mappedBy = "attendance", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<AttendanceVideo> attendanceVideos = new ArrayList<>(); // 시청한 영상
+
+    public void addViewingTime(Integer viewingTime) {
+        this.viewingTime += viewingTime;
+    }
 }

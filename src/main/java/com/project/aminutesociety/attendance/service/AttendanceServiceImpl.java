@@ -59,7 +59,11 @@ public class AttendanceServiceImpl implements AttendanceService{
                     .build();
             attendanceRepository.save(attendance);
         }
-
+        else {
+            // 기존의 출석 값이 존재하더라도 시간 증가
+            attendance.addViewingTime(viewingTime);
+            attendanceRepository.save(attendance);
+        }
 
         List<Integer> videoIdList = setAttendanceDto.getVideoId();
         List<AttendanceVideo> newAttendanceVideos = new ArrayList<>();
