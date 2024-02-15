@@ -22,4 +22,8 @@ public class Scrap {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "video_id")
     private Video video;
+
+    public static Scrap createScrapEntity(User user, Video video) {
+        return Scrap.builder().user(user).video(video).build();
+    }
 }

@@ -45,4 +45,11 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.createFailWithoutData(HttpStatus.NOT_FOUND.value(), e.getMessage()));
     }
 
+    @ExceptionHandler(EntityDuplicatedException.class)
+    public ResponseEntity<ApiResponse<?>> handleEntityDuplicatedException(EntityDuplicatedException e) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ApiResponse.createFailWithoutData(HttpStatus.CONFLICT.value(), e.getMessage()));
+    }
+
 }
