@@ -19,4 +19,9 @@ public class AttendanceController {
                                                       @RequestBody SetAttendanceDto setAttendanceDto) {
         return attendanceService.setSaveTime(userId, setAttendanceDto);
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse<?>> readAttendanceAll(@PathVariable("userId") String userId) {
+        return attendanceService.readAttendanceAll(userId);
+    }
 }
