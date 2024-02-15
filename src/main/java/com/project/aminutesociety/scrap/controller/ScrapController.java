@@ -24,4 +24,10 @@ public class ScrapController {
         ResponseEntity<ApiResponse<?>> result = scrapService.deleteScrap(userId, videoId);
         return result;
     }
+
+    @GetMapping("{userId}")
+    public ResponseEntity<ApiResponse<?>> getUserScrap(@PathVariable("userId") String userId, @RequestParam("type") String type) {
+        ResponseEntity<ApiResponse<?>> result = scrapService.getUserScrap(userId, type);
+        return result;
+    }
 }
