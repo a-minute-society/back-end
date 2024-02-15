@@ -77,7 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
             user.getUserCategories().add(userCategory);
         }
 
-        ApiResponse<String> response = ApiResponse.createSuccessWithoutData(200, "카테고리 설정이 완료되었습니다.");
+        ApiResponse<String> response = ApiResponse.createSuccessWithoutData(201, "카테고리 설정이 완료되었습니다.");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
