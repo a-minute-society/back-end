@@ -40,4 +40,7 @@ public class Video extends BaseEntity {
 
     @OneToMany(mappedBy = "video", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Scrap> scraps = new ArrayList<>();
+
+    @OneToMany(mappedBy = "video", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<AttendanceVideo> attendanceVideos = new ArrayList<>(); // 출석
 }
