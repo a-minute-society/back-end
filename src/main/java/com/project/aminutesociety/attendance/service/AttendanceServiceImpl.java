@@ -11,7 +11,6 @@ import com.project.aminutesociety.domain.User;
 import com.project.aminutesociety.domain.Video;
 import com.project.aminutesociety.scrap.repository.ScrapRepository;
 import com.project.aminutesociety.user.repository.UserRepository;
-import com.project.aminutesociety.util.exception.EntityDuplicatedException;
 import com.project.aminutesociety.util.exception.EntityNotFoundException;
 import com.project.aminutesociety.util.response.ApiResponse;
 import com.project.aminutesociety.video.repository.VideoRepository;
@@ -60,7 +59,11 @@ public class AttendanceServiceImpl implements AttendanceService{
                     .build();
             attendanceRepository.save(attendance);
         }
-
+        else {
+            // 기존의 출석 값이 존재하더라도 시간 증가
+            attendance.addViewingTime(viewingTime);
+            attendanceRepository.save(attendance);
+        }
 
         List<Integer> videoIdList = setAttendanceDto.getVideoId();
         List<AttendanceVideo> newAttendanceVideos = new ArrayList<>();
@@ -111,13 +114,13 @@ public class AttendanceServiceImpl implements AttendanceService{
             AttendanceResDto attendanceResDto = AttendanceResDto.builder()
                     .attendanceId(attendance.getId())
                     .date(attendance.getDate())
-                    .accumulatedTime(formateTime(attendance.getViewingTime()))
+                    .accumulatedTime(formatTimeIncludeHour(attendance.getViewingTime()))
                     .build();
             attendanceResDtos.add(attendanceResDto);
         });
 
         MyPageResDto myPageResDto = MyPageResDto.builder()
-                .totalTime(formateTimeIncludeHour(user.getSavedTime()))
+                .totalTime(formatTimeIncludeHour(user.getSavedTime()))
                 .calendar(attendanceResDtos)
                 .build();
 
@@ -173,24 +176,16 @@ public class AttendanceServiceImpl implements AttendanceService{
         return formattedDate;
     }
 
-    // 초를 mm-ss로 변환
-    private static String formateTime(Integer totalSeconds) {
-
-        int minutes = totalSeconds / 60;
-        int seconds = totalSeconds % 60;
-
-        String formattedTime = String.format("%02d:%02d", minutes, seconds);
-        return formattedTime;
-    }
-
-    // 초를 hh-mm-ss로 변환
-    private static String formateTimeIncludeHour(Integer totalSeconds) {
-
+    // 초를 hh:mm:ss로 변환
+    private static String formatTimeIncludeHour(Integer totalSeconds) {
         int hours = totalSeconds / 3600;
-        int minutes = totalSeconds / 60;
-        int seconds = totalSeconds % 60;
+        int remainingSeconds = totalSeconds % 3600;
+        int minutes = remainingSeconds / 60;
+        int seconds = remainingSeconds % 60;
 
+        // 시간을 2자리로 포맷팅
         String formattedTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
         return formattedTime;
     }
+
 }
