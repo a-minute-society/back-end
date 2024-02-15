@@ -4,6 +4,7 @@ import com.project.aminutesociety.category.dto.CategoryResponseDto;
 import com.project.aminutesociety.category.dto.CategorySetDto;
 import com.project.aminutesociety.domain.Category;
 import com.project.aminutesociety.category.repository.CategoryRepository;
+import com.project.aminutesociety.domain.Video;
 import com.project.aminutesociety.user.dto.UserSignUpDto;
 import com.project.aminutesociety.domain.User;
 import com.project.aminutesociety.user.repository.UserRepository;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static java.lang.Long.valueOf;
 
 @Service
 @RequiredArgsConstructor
@@ -57,22 +60,18 @@ public class CategoryServiceImpl implements CategoryService {
         List<UserCategory> userCategories = new ArrayList<>();
 
         for (Long categoryId : categorySetDto.getCategoryIds()) {
-            Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
-            // category id가 유효한지 확인
-            if (!optionalCategory.isPresent()) {
-                // id 가 유효하지 않다면 기존에 세팅했던 카테고리 초기화
-                user.getUserCategories().clear();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ApiResponse.readCategoriesFailWithoutData(400, "id가 "+categoryId + "인 카테고리가 존재하지 않습니다."));
-            }
-            Category category = optionalCategory.get();
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> {
+                        user.getUserCategories().clear(); // 기존 카테고리 지우기
+                        return new EntityNotFoundException("id가 " + categoryId + "인 카테고리는 존재하지 않습니다.");
+                    });
 
             // UserCategory 엔티티 생성
-            UserCategory userCategory =
-                    UserCategory.builder()
+            UserCategory userCategory = UserCategory.builder()
                     .user(user)
                     .category(category)
                     .build();
+
             // 유저와 연결
             user.getUserCategories().add(userCategory);
         }
@@ -92,13 +91,9 @@ public class CategoryServiceImpl implements CategoryService {
 
         // category id가 유효한지 먼저 확인
         for (Long categoryId : categorySetDto.getCategoryIds()) {
-            Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
-
-            if (!optionalCategory.isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ApiResponse.readCategoriesFailWithoutData(400, "id가 " + categoryId + "인 카테고리가 존재하지 않습니다."));
-            }
-            Category category = optionalCategory.get();
+            // 카테고리가 존재하는지 확인
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new EntityNotFoundException("id가 " + categoryId + "인 카테고리는 존재하지 않습니다."));
             categories.add(category);
         }
 
