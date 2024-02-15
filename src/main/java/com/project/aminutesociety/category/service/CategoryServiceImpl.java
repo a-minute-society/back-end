@@ -8,6 +8,7 @@ import com.project.aminutesociety.user.dto.UserSignUpDto;
 import com.project.aminutesociety.domain.User;
 import com.project.aminutesociety.user.repository.UserRepository;
 import com.project.aminutesociety.domain.UserCategory;
+import com.project.aminutesociety.util.exception.EntityNotFoundException;
 import com.project.aminutesociety.util.response.ApiResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -47,15 +48,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public ResponseEntity<ApiResponse<?>> setCateogires(String userId, CategorySetDto categorySetDto) {
-        Optional<User> optionalUser = userRepository.findUserByUserId(userId);
 
-        // 존재하는 회원인지 확인
-        if (!optionalUser.isPresent()) {
-            ApiResponse<UserSignUpDto.Res> res = ApiResponse.checkUserIdFailWithoutData(400, "회원을 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-        }
-
-        User savedUser = optionalUser.get();
+        // 유저가 존재하는지 확인하고 유저 가져오기
+        User user = userRepository.findUserByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId + "인 사용자는 존재하지 않습니다."));
 
         // 새로운 관심분야 설정
         List<UserCategory> userCategories = new ArrayList<>();
@@ -65,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
             // category id가 유효한지 확인
             if (!optionalCategory.isPresent()) {
                 // id 가 유효하지 않다면 기존에 세팅했던 카테고리 초기화
-                savedUser.getUserCategories().clear();
+                user.getUserCategories().clear();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(ApiResponse.readCategoriesFailWithoutData(400, "id가 "+categoryId + "인 카테고리가 존재하지 않습니다."));
             }
@@ -74,11 +70,11 @@ public class CategoryServiceImpl implements CategoryService {
             // UserCategory 엔티티 생성
             UserCategory userCategory =
                     UserCategory.builder()
-                    .user(savedUser)
+                    .user(user)
                     .category(category)
                     .build();
             // 유저와 연결
-            savedUser.getUserCategories().add(userCategory);
+            user.getUserCategories().add(userCategory);
         }
 
         ApiResponse<String> response = ApiResponse.createSuccessWithoutData(200, "카테고리 설정이 완료되었습니다.");
@@ -87,15 +83,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseEntity<ApiResponse<?>> changeCategories(String userId, CategorySetDto categorySetDto) {
-        Optional<User> optionalUser = userRepository.findUserByUserId(userId);
 
-        // 존재하는 회원인지 확인
-        if (!optionalUser.isPresent()) {
-            ApiResponse<UserSignUpDto.Res> res = ApiResponse.checkUserIdFailWithoutData(400, "회원을 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-        }
-
-        User savedUser = optionalUser.get();
+        // 유저가 존재하는지 확인하고 유저 가져오기
+        User user = userRepository.findUserByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId + "인 사용자는 존재하지 않습니다."));
 
         List<Category> categories = new ArrayList<>();
 
@@ -112,17 +103,17 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         // 모두  유효한 id -> 새로운 관심분야 설정
-        savedUser.getUserCategories().clear();
+        user.getUserCategories().clear();
         List<UserCategory> userCategories = new ArrayList<>();
 
         for(Category category : categories ) {
             UserCategory userCategory =
                     UserCategory.builder()
-                            .user(savedUser)
+                            .user(user)
                             .category(category)
                             .build();
             // 유저와 연결
-            savedUser.getUserCategories().add(userCategory);
+            user.getUserCategories().add(userCategory);
         }
 
         ApiResponse<String> response = ApiResponse.createSuccessWithoutData(200, "카테고리 수정이 완료되었습니다.");
