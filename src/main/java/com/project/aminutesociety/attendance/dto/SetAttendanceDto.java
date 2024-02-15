@@ -8,6 +8,6 @@ import java.util.List;
 public class SetAttendanceDto {
 
     private List<Integer> videoId;
-    private List<String> viewingTime;
+    private Integer viewingTime;
 
 }

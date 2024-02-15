@@ -40,18 +40,15 @@ public class AttendanceServiceImpl implements AttendanceService{
         User user = userRepository.findUserByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId + "인 사용자는 존재하지 않습니다."));
 
-        List<String> viewingTimeList = setAttendanceDto.getViewingTime();
+        Integer viewingTime = setAttendanceDto.getViewingTime();
 
-        // 리스트로 들어온 시청 기록들을 더함
-        Integer sumViewingTime = sumStringTime(viewingTimeList);
-
-        // 유저의 틈새시간 누적
-        user.addSaveTime(sumViewingTime);
+        // 유저의 틈새시간 초단위로 누적
+        user.addSaveTime(viewingTime);
 
         // 출석 생성
         Attendance attendance = Attendance.builder()
                 .date(formatDate())
-                .viewingTime(sumViewingTime)
+                .viewingTime(viewingTime)
                 .user(user)
                 .attendanceVideos(new ArrayList<>())
                 .build();
@@ -145,21 +142,6 @@ public class AttendanceServiceImpl implements AttendanceService{
 
         ApiResponse<List<MyPageDetailResDto>> response = ApiResponse.createSuccessWithData(myPageDetailResDtos, "해당 날짜의 기록이 정상적으로 조회되었습니다.");
         return ResponseEntity.ok(response);
-    }
-
-    // 각 시청 시간을 분과 초로 나누어 초로 변환하여 더함
-    private static Integer sumStringTime(List<String> viewingTime) {
-        Integer sumViewingTimeInSeconds = 0;
-
-        for (String time : viewingTime) {
-            // 시간과 분을 나눔
-            String[] parts = time.split(":");
-
-            int minutes = Integer.parseInt(parts[0]); // 분
-            int seconds = Integer.parseInt(parts[1]); // 초
-            sumViewingTimeInSeconds += minutes * 60 + seconds; // 초로 변환하여 더함
-        }
-        return sumViewingTimeInSeconds;
     }
 
     // 현재 날짜 yyyy-mm-dd 형태롤 리턴
