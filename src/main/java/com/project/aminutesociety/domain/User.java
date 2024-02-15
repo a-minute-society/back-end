@@ -30,6 +30,7 @@ public class User extends BaseEntity {
     private Integer time; // 소요시간
     private String depart; // 출발지
     private String arrive; // 도착지
+    private Integer savedTime; // 절약한 시간
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<UserCategory> userCategories = new ArrayList<>();
@@ -42,8 +43,17 @@ public class User extends BaseEntity {
 
     public static User signUp(UserSignUpDto.Req req) { return req.toEntity(); }
 
+    // 소요시간 변경
     public void changeTime(Integer time) {
         this.time = time;
+    }
+
+    // 절약한 시간 누적
+    public void addSaveTime(Integer savedTime) {
+        if(this.savedTime != null )
+            this.savedTime += savedTime;
+        else
+            this.savedTime = savedTime;
     }
 
 }

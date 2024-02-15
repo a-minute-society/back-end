@@ -4,6 +4,9 @@ import com.project.aminutesociety.util.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "ATTENDANCES")
 @Getter
@@ -25,4 +28,7 @@ public class Attendance extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user; // 유저 FK
+
+    @OneToMany(mappedBy = "attendance", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<AttendanceVideo> attendanceVideos = new ArrayList<>(); // 시청한 영상
 }
