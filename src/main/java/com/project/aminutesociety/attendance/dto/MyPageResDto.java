@@ -9,6 +9,6 @@ import java.util.List;
 @NoArgsConstructor()
 @AllArgsConstructor()
 public class MyPageResDto {
-    private Integer totalTime;
+    private String totalTime;
     private List<AttendanceResDto> calendar;
 }

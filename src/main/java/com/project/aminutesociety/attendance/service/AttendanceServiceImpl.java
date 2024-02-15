@@ -98,7 +98,7 @@ public class AttendanceServiceImpl implements AttendanceService{
         });
 
         MyPageResDto myPageResDto = MyPageResDto.builder()
-                .totalTime(user.getSavedTime())
+                .totalTime(formateTimeIncludeHour(user.getSavedTime()))
                 .calendar(attendanceResDtos)
                 .build();
 
@@ -139,6 +139,17 @@ public class AttendanceServiceImpl implements AttendanceService{
         int seconds = totalSeconds % 60;
 
         String formattedTime = String.format("%02d:%02d", minutes, seconds);
+        return formattedTime;
+    }
+
+    // 초를 hh-mm-ss로 변환
+    private static String formateTimeIncludeHour(Integer totalSeconds) {
+
+        int hours = totalSeconds / 3600;
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+
+        String formattedTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
         return formattedTime;
     }
 }
