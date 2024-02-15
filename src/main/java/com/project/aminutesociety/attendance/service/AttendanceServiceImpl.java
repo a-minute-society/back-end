@@ -1,6 +1,7 @@
 package com.project.aminutesociety.attendance.service;
 
 import com.project.aminutesociety.attendance.dto.AttendanceResDto;
+import com.project.aminutesociety.attendance.dto.MyPageDetailResDto;
 import com.project.aminutesociety.attendance.dto.MyPageResDto;
 import com.project.aminutesociety.attendance.dto.SetAttendanceDto;
 import com.project.aminutesociety.attendance.repository.AttendanceRepository;
@@ -8,7 +9,9 @@ import com.project.aminutesociety.domain.Attendance;
 import com.project.aminutesociety.domain.AttendanceVideo;
 import com.project.aminutesociety.domain.User;
 import com.project.aminutesociety.domain.Video;
+import com.project.aminutesociety.scrap.repository.ScrapRepository;
 import com.project.aminutesociety.user.repository.UserRepository;
+import com.project.aminutesociety.util.exception.EntityDuplicatedException;
 import com.project.aminutesociety.util.exception.EntityNotFoundException;
 import com.project.aminutesociety.util.response.ApiResponse;
 import com.project.aminutesociety.video.repository.VideoRepository;
@@ -29,6 +32,7 @@ public class AttendanceServiceImpl implements AttendanceService{
     private final AttendanceRepository attendanceRepository;
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
+    private final ScrapRepository scrapRepository;
 
     @Override
     public ResponseEntity<ApiResponse<?>> setSaveTime(String userId, SetAttendanceDto setAttendanceDto) {
@@ -90,7 +94,7 @@ public class AttendanceServiceImpl implements AttendanceService{
         attendances.forEach( attendance -> {
             // Dto로 변환
             AttendanceResDto attendanceResDto = AttendanceResDto.builder()
-                    .id(attendance.getId())
+                    .attendanceId(attendance.getId())
                     .date(attendance.getDate())
                     .accumulatedTime(formateTime(attendance.getViewingTime()))
                     .build();
@@ -103,6 +107,43 @@ public class AttendanceServiceImpl implements AttendanceService{
                 .build();
 
         ApiResponse<MyPageResDto> response = ApiResponse.createSuccessWithData(myPageResDto, "마이페이지 API 호출 성공");
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<?>> readAttendance(String userId, String date) {
+        // 유저가 존재하는지 확인하고 유저 가져오기
+        User user = userRepository.findUserByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId + "인 사용자는 존재하지 않습니다."));
+
+        // 해당 날짜의 출석 정보 가져오기
+        Attendance attendance = attendanceRepository.findByDate(date);
+        if (attendance == null) {
+            throw new EntityNotFoundException(date + "일에 대한 출석 정보를 찾을 수 없습니다.");
+        }
+
+        // 출석 정보에 연결된 모든 비디오 가져오기
+        List<AttendanceVideo> attendanceVideos = attendance.getAttendanceVideos();
+        List<MyPageDetailResDto> myPageDetailResDtos = new ArrayList<>();
+
+        attendanceVideos.forEach( attendanceVideo -> {
+            Video video = attendanceVideo.getVideo();
+
+            // 스크랩  여부 설정
+            boolean isScrap = scrapRepository.findByUserAndVideo(user, video).isPresent() ? true : false;
+
+            MyPageDetailResDto myPageDetailResDto = MyPageDetailResDto.builder()
+                    .videoId(video.getId())
+                    .categoryId(video.getCategory().getId())
+                    .isScrap(isScrap)
+                    .url(video.getUrl())
+                    .title(video.getTitle())
+                    .build();
+
+            myPageDetailResDtos.add(myPageDetailResDto);
+        });
+
+        ApiResponse<List<MyPageDetailResDto>> response = ApiResponse.createSuccessWithData(myPageDetailResDtos, "해당 날짜의 기록이 정상적으로 조회되었습니다.");
         return ResponseEntity.ok(response);
     }
 
