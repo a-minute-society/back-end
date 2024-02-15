@@ -45,21 +45,29 @@ public class AttendanceServiceImpl implements AttendanceService{
         // 유저의 틈새시간 초단위로 누적
         user.addSaveTime(viewingTime);
 
-        // 출석 생성
-        Attendance attendance = Attendance.builder()
-                .date(formatDate())
-                .viewingTime(viewingTime)
-                .user(user)
-                .attendanceVideos(new ArrayList<>())
-                .build();
-        attendanceRepository.save(attendance);
+        // 날짜 중복 확인
+        String date = formatDate();
+        Attendance attendance = attendanceRepository.findByDate(date);
+
+        // 존재하지 않을 경우
+        if(attendance == null) {
+            // 출석 생성
+            attendance = Attendance.builder()
+                    .date(formatDate())
+                    .viewingTime(viewingTime)
+                    .user(user)
+                    .attendanceVideos(new ArrayList<>())
+                    .build();
+            attendanceRepository.save(attendance);
+        }
+
 
         List<Integer> videoIdList = setAttendanceDto.getVideoId();
 
-        videoIdList.forEach(videoId -> {
+        for (Integer videoId : videoIdList) {
             // 영상이 존재하는지 확인
             Video video = videoRepository.findById(valueOf(videoId))
-                    .orElseThrow(() -> new EntityNotFoundException("id가 " +videoId + "인 영상은 존재하지 않습니다."));
+                    .orElseThrow(() -> new EntityNotFoundException("id가 " + videoId + "인 영상은 존재하지 않습니다."));
 
             // attendanceVideo 생성
             AttendanceVideo attendanceVideo = AttendanceVideo.builder()
@@ -67,7 +75,7 @@ public class AttendanceServiceImpl implements AttendanceService{
                     .video(video)
                     .build();
             attendance.getAttendanceVideos().add(attendanceVideo);
-        });
+        }
 
         user.getAttendances().add(attendance);
         userRepository.save(user);
