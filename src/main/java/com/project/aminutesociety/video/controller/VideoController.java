@@ -27,4 +27,10 @@ public class VideoController {
         ResponseEntity<ApiResponse<?>> result = videoService.editRecommendVideo(userId, time, req);
         return result;
     }
+
+    @GetMapping("home/recommend/{userId}")
+    public ResponseEntity<ApiResponse<?>> getVideoRecommend(@PathVariable("userId") String userId) {
+        ResponseEntity<ApiResponse<?>> result = videoService.getVideoRecommend(userId);
+        return result;
+    }
 }
