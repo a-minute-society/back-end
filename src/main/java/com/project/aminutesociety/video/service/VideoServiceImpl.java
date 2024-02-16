@@ -13,6 +13,7 @@ import com.project.aminutesociety.video.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.Collections;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -130,6 +131,59 @@ public class VideoServiceImpl implements VideoService{
         // 응답 반환
         ApiResponse<EditRecommendVideo.Res> apiResponse = ApiResponse.createSuccessWithData(response, "영상 추천에 성공하였습니다.");
         return ResponseEntity.ok(apiResponse);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<?>> getVideoRecommend(String userId) {
+
+        // 유저가 존재하는지 확인하고 유저 가져오기
+        User user = userRepository.findUserByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId + "인 사용자는 존재하지 않습니다."));
+
+        // 유저의 관심 카테고리 가져오기
+        List<UserCategory> userCategories = user.getUserCategories();
+        List<Video> categoryVideos = new ArrayList<>();
+
+        // 해당 카테고리의 영상들 가져오기
+        for (UserCategory userCategory : userCategories) {
+            Category category = userCategory.getCategory();
+            List<Video> videos = videoRepository.findByCategory(category);
+            categoryVideos.addAll(videos);
+        }
+
+        // recommendVideoList = categoryId가 같은 것들 중 랜덤으로 2개씩의 영상을 추출
+        List<Video> recommendVideoList = new ArrayList<>();
+
+        // 카테고리별로 영상을 가져와서 각 카테고리별로 2개의 랜덤 영상을 선택
+        for (UserCategory userCategory : userCategories) {
+            Category category = userCategory.getCategory();
+            List<Video> videos = videoRepository.findByCategory(category);
+
+            // 리스트를 섞고 처음 2개의 영상을 선택
+            Collections.shuffle(videos);
+            List<Video> randomVideos = videos.stream().limit(2).collect(Collectors.toList());
+            recommendVideoList.addAll(randomVideos);
+        }
+
+        // DTO로 변환
+        List<RecommendVideo.Res.RecommendVideoDto> recommendVideoDtos = recommendVideoList.stream()
+                .map(video -> RecommendVideo.Res.RecommendVideoDto.builder()
+                        .videoId(video.getId())
+                        .categoryId(video.getCategory().getId())
+                        .runTime(formatRunTime(video.getRunTime()))
+                        .url(video.getUrl())
+                        .videoTitle(video.getTitle())
+                        .build())
+                .collect(Collectors.toList());
+
+        // 응답 객체 생성 및 반환
+        RecommendVideo.Res responseDto = new RecommendVideo.Res();
+        responseDto.setVideos(recommendVideoDtos);
+
+        // 응답 반환
+        ApiResponse<RecommendVideo.Res> response = ApiResponse.createSuccessWithData(responseDto, "영상 추천에 성공하였습니다.");
+        return ResponseEntity.ok(response);
+
     }
 
     // 재생 시간 응답을 위해 포맷 작성
