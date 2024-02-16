@@ -15,4 +15,6 @@ public interface UserService {
     ResponseEntity<ApiResponse<?>> userInfo(String userId);
 
     ResponseEntity<ApiResponse<?>> changeTime(String userId, ChangeTimeDto changeTimeDto);
+
+    ResponseEntity<ApiResponse<?>> SignOut(String userId);
 }

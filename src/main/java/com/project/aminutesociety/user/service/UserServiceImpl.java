@@ -142,4 +142,18 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
+
+    // 회원 탈퇴
+    @Override
+    public ResponseEntity<ApiResponse<?>> SignOut(String userId) {
+        // 유저가 존재하는지 확인하고 유저 가져오기
+        User user = userRepository.findUserByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(userId + "인 사용자는 존재하지 않습니다."));
+
+        userRepository.delete(user);
+
+        ApiResponse<String> response = ApiResponse.createFailWithoutData(202, "회원탈퇴가 정상적으로 처리되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }
