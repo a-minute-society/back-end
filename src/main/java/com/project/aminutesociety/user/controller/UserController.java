@@ -55,4 +55,11 @@ public class UserController {
         return result;
     }
 
+    // 회원 탈퇴
+    @DeleteMapping("/{userId}/signout")
+    public ResponseEntity<ApiResponse<?>> logout(@PathVariable String userId) {
+        ResponseEntity<ApiResponse<?>> result = userService.SignOut(userId);
+        return result;
+    }
+
 }
